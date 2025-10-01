@@ -49,6 +49,7 @@ func (r *movieRepository) GetMovies() ([]*models.Movie, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
+	//add comment
 	return movies, nil
 }
 
