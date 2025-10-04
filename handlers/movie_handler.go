@@ -73,7 +73,8 @@ func (h *Handler) GetMovie(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"movie": movie})
 }
 func (h *Handler) GetMovies(c *gin.Context) {
-	movies, err := h.movieService.GetMovies()
+	genre := c.Query("genre")
+	movies, err := h.movieService.GetMovies(genre)
 	if err != nil {
 		_ = c.Error(err)
 		return

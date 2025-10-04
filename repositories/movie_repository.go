@@ -10,7 +10,7 @@ import (
 type MovieRepository interface {
 	CreateMovie(movie *models.Movie) (*models.Movie, error)
 	GetMovie(id int) (*models.Movie, error)
-	GetMovies() ([]*models.Movie, error)
+	GetMovies(query string) ([]*models.Movie, error)
 	UpdateMovie(movie *models.Movie) (*models.Movie, error)
 	DeleteMovie(movie *models.Movie) (*models.Movie, error)
 }
@@ -49,9 +49,9 @@ func (r *movieRepository) GetMovie(id int) (*models.Movie, error) {
 	return &movie, nil
 }
 
-func (r *movieRepository) GetMovies() ([]*models.Movie, error) {
+func (r *movieRepository) GetMovies(query string) ([]*models.Movie, error) {
 	var movies []*models.Movie
-	result := r.db.Find(&movies)
+	result := r.db.Where("genre = ?", query).Find(&movies)
 	if result.Error != nil {
 		return nil, result.Error
 	}

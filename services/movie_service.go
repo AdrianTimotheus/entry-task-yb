@@ -10,7 +10,7 @@ import (
 type MovieService interface {
 	CreateMovie(movie *dto.CreateMovieReq) (*models.Movie, error)
 	GetMovie(id int) (*models.Movie, error)
-	GetMovies() ([]*models.Movie, error)
+	GetMovies(query string) ([]*models.Movie, error)
 	UpdateMovie(movie *dto.UpdateMovieReq) (*models.Movie, error)
 	DeleteMovie(movie *dto.DeleteMovieReq) (*models.Movie, error)
 }
@@ -73,8 +73,8 @@ func (s *movieService) GetMovie(id int) (*models.Movie, error) {
 	return movie, nil
 }
 
-func (s *movieService) GetMovies() ([]*models.Movie, error) {
-	movies, err := s.movieRepository.GetMovies()
+func (s *movieService) GetMovies(query string) ([]*models.Movie, error) {
+	movies, err := s.movieRepository.GetMovies(query)
 	if err != nil {
 		return nil, err
 	}
