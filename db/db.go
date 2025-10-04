@@ -5,20 +5,14 @@ import (
 	"log"
 	"os"
 
-	"gorm.io/driver/mysql"
+	"awesomeProject/helper"
+
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
 
 var db *gorm.DB
-
-func getENV(key, defaultValue string) string {
-	env := os.Getenv(key)
-	if env == "" {
-		return defaultValue
-	}
-	return env
-}
 
 func getLogger() logger.Interface {
 	return logger.New(
@@ -30,14 +24,14 @@ func getLogger() logger.Interface {
 }
 
 func Connect() (err error) {
-	//dsn := "user:pass@tcp(127.0.0.1:3306)/dbname?charset=ut?f8mb4&parseTime=True&loc=Local"
-	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local",
-		getENV("DB_USER", "root"),
-		getENV("DB_PASSWORD", "password"),
-		getENV("DB_HOST", "localhost"),
-		getENV("DB_PORT", "3306"),
-		getENV("DB_NAME", "CineVerse"))
-	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+	dsn := fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v sslmode=disable TimeZone=Asia/Shanghai",
+		helper.GetENV("DB_HOST", "localhost"),
+		helper.GetENV("DB_USER", "root"),
+		helper.GetENV("DB_PASSWORD", "password"),
+		helper.GetENV("DB_NAME", "CineVerse"),
+		helper.GetENV("DB_PORT", "5432")) // Default PostgreSQL port is 5432
+
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{ // Use postgres.Open()
 		Logger: getLogger(),
 	})
 	return err

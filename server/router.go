@@ -28,8 +28,23 @@ func NewRouter(c *RouterConfig) *gin.Engine {
 		MovieService: c.MovieService,
 	})
 
-	router.POST("/signup", h.SignUp)
-	router.POST("/verify_otp", h.VerifyOTP)
+	movieRoutes := router.Group("/movies")
+	{
+		movieRoutes.POST("", h.CreateMovie)
+		movieRoutes.GET("", h.GetMovies)
+		movieRoutes.GET("/:id", h.GetMovie)
+		movieRoutes.PUT("", h.UpdateMovie)
+		movieRoutes.DELETE("", h.DeleteMovie)
+	}
+
+	actorRoutes := router.Group("/actors")
+	{
+		actorRoutes.POST("", h.CreateActor)
+		actorRoutes.GET("", h.GetActors)
+		actorRoutes.GET("/:id", h.GetActor)
+		actorRoutes.PUT("", h.UpdateActor)
+		actorRoutes.DELETE("", h.DeleteActor)
+	}
 
 	router.NoRoute(func(c *gin.Context) {
 		c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})

@@ -3,6 +3,7 @@ package repositories
 import (
 	"awesomeProject/models"
 
+	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
 )
 
@@ -15,15 +16,20 @@ type MovieRepository interface {
 }
 
 type movieRepository struct {
-	db *gorm.DB
+	db  *gorm.DB
+	rdb *redis.Client
 }
 
 type MovieRepositoryConfig struct {
-	DB *gorm.DB
+	DB  *gorm.DB
+	RDB *redis.Client
 }
 
 func NewMovieRepository(config *MovieRepositoryConfig) MovieRepository {
-	return &movieRepository{db: config.DB}
+	return &movieRepository{
+		db:  config.DB,
+		rdb: config.RDB,
+	}
 }
 
 func (r *movieRepository) CreateMovie(movie *models.Movie) (*models.Movie, error) {

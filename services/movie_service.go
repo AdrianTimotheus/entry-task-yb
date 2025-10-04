@@ -82,6 +82,9 @@ func (s *movieService) GetMovies() ([]*models.Movie, error) {
 }
 
 func (s *movieService) UpdateMovie(movie *dto.UpdateMovieReq) (*models.Movie, error) {
+	if movie.Year < 1888 {
+		return nil, errors.New("year must be greater than or equal to 1888")
+	}
 	updatedMovie := models.Movie{
 		ID:          movie.ID,
 		Title:       movie.Title,
